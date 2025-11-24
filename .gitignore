@@ -56,8 +56,7 @@ db.sqlite3-journal
 # Don't ignore the main SQLite DB — included intentionally per request
 # (If you later want to exclude it, add `db.sqlite3` here)
 
-# Media uploads (ignore by default — keep out of repo unless you want them tracked)
-media/
+# Media uploads are tracked in this repository
 
 # Environment files
 .env
