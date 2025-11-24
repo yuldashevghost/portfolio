@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Login · Portfolio{% endblock %}
+
+{% block content %}
+<section class="auth-panel" data-animate>
+    <h1>Sign in</h1>
+    <p class="muted">Securely manage your content right from the frontend.</p>
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="field">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
+        <div class="field">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+        </div>
+        <button class="btn primary" type="submit">Login</button>
+    </form>
+</section>
+{% endblock %}
+
+

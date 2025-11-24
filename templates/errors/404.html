@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found · Portfolio{% endblock %}
+
+{% block content %}
+<section class="error-panel" data-animate>
+    <h1>404</h1>
+    <p>The page you are looking for escaped into hyperspace.</p>
+    <a class="btn primary" href="{% url 'home' %}">Back to home</a>
+</section>
+{% endblock %}
+
+

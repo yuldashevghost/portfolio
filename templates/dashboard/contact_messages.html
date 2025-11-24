@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Messages · Portfolio{% endblock %}
+
+{% block content %}
+<section class="dashboard-panel" data-animate>
+    <h1>Contact Messages</h1>
+    <div class="messages-list">
+        {% for message in messages_list %}
+            <article>
+                <header>
+                    <strong>{{ message.subject }}</strong>
+                    <span>{{ message.created_at|date:"M d, Y H:i" }}</span>
+                </header>
+                <p>{{ message.message }}</p>
+                <footer>
+                    <span>{{ message.name }} · <a href="mailto:{{ message.email }}">{{ message.email }}</a></span>
+                </footer>
+            </article>
+        {% empty %}
+            <p class="muted">No messages yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+

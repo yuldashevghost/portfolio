@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Server error · Portfolio{% endblock %}
+
+{% block content %}
+<section class="error-panel" data-animate>
+    <h1>500</h1>
+    <p>Something unexpected happened. Our bots are on it!</p>
+    <a class="btn primary" href="{% url 'home' %}">Back to safety</a>
+</section>
+{% endblock %}
+
+

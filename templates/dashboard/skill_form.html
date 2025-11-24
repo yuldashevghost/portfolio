@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Skills · Portfolio{% endblock %}
+
+{% block content %}
+<section class="dashboard-panel" data-animate>
+    <h1>Edit Skill</h1>
+    <form method="post" class="dashboard-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="field">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button class="btn primary" type="submit">Save</button>
+    </form>
+</section>
+{% endblock %}
+
+

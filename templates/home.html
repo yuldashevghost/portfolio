@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio · XojiMuhammad{% endblock %}
+
+{% block content %}
+<section id="home" class="hero" data-animate>
+    <div class="hero-text">
+        <p class="eyebrow">Backend Developer · Python · Django</p>
+        <h1>Hi, I'm <span>XojiMuhammad</span></h1>
+        <p class="lead">I build human-first digital experiences with Python, Django, and modern web tech. I focus on pragmatic engineering, clean aesthetics, and delightful interactions.</p>
+        <div class="hero-cta">
+            <a class="btn primary" href="#projects">View Portfolio</a>
+            <a class="btn ghost" href="#contact">Contact Me</a>
+        </div>
+        <div class="stats">
+            <div><strong>{{ experience_years }}+</strong><span>Years Experience</span></div>
+            <div><strong>{{ happy_clients }}</strong><span>Happy Clients</span></div>
+            <div><strong>{{ projects|length }}</strong><span>Projects</span></div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="orbit">
+            <div class="planet"></div>
+            <div class="satellite"></div>
+        </div>
+        <div class="noise"></div>
+    </div>
+</section>
+
+<section id="about" class="panel" data-animate>
+    <div class="about-card">
+        <div class="profile">
+            <img src="../static/images/men.jpg" alt="Profile photo">
+        </div>
+        <div class="about-copy">
+            <h2>About Me</h2>
+            <p>My name is Xojimuhammad. I'm from Andijan, Asaka province. I am 19 years old. I am a lazy learner, reading book with running a diary as a discipline lover. Recilient at any lost</p>
+            <p>I'm a multi-disciplinary engineer who loves shipping ambitious products. I craft backend services with Django, build beautiful frontends, and obsess over performance, accessibility, and polish.</p>
+            <!-- <p>I mentor teams, design scalable APIs, and experiment with creative coding (particles, shaders, WebGL). If it requires curiosity and craft, I'm in.</p> -->
+            <!-- <div class="about-actions">
+                <a class="btn primary" href="https://drive.google.com" target="_blank" rel="noopener">Download CV</a>
+                <a class="btn ghost" href="xojimuhammadyuldashev207@gmail.com">Hire Me</a>
+            </div> -->
+            <ul class="experience-list">
+                <li><span>✔</span> Graduated Najot Ta'lim</li>
+                <li><span>✔</span> Studying at Univeristy of science and technologies</li>
+                <li><span>✔</span> Passionate about developer experience</li>
+                <li><span>✔</span> Got mad of chess</li>
+                <li><span>✔</span> Habit of playing "Zakovat"</li>
+                <li><span>✔</span> Owner of IELTS 6.0</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="skills" class="panel" data-animate>
+    <div class="section-header">
+        <h2>Skills Matrix</h2>
+        {% if user.is_authenticated and skills %}
+            <p class="muted">Need changes? <a href="{% url 'skill_update' skills.first.pk %}">Edit skills</a></p>
+        {% endif %}
+    </div>
+    <div class="skill-grid">
+        {% for skill in skills %}
+            <div class="skill-card" data-animate data-progress="{{ skill.proficiency }}">
+                <div class="skill-ring">
+                    <svg viewBox="0 0 36 36">
+                        <path class="bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        <path class="meter" data-progress-path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    </svg>
+                    <div class="skill-value"><span>{{ skill.proficiency }}%</span></div>
+                </div>
+                <div class="skill-info">
+                    <h3><i class="{{ skill.icon }}"></i> {{ skill.name }}</h3>
+                    <p>{{ skill.level }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="projects" class="panel" data-animate>
+    <div class="section-header">
+        <h2>Selected Projects</h2>
+        <div class="filters" id="projectFilters">
+            <button class="filter active" data-filter="all">All</button>
+            <button class="filter" data-filter="django">Django</button>
+            <button class="filter" data-filter="python">Python</button>
+            <button class="filter" data-filter="web">Web</button>
+            <button class="filter" data-filter="other">Others</button>
+        </div>
+        {% if user.is_authenticated %}
+            <a class="btn primary" href="{% url 'project_create' %}"><i class="ri-add-line"></i> Add project</a>
+        {% endif %}
+    </div>
+    <div class="project-grid">
+        {% for project in projects %}
+            <article class="project-card" data-category="{{ project.category }}" data-animate>
+                <div class="project-media">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=600&q=80" alt="{{ project.title }}">
+                    {% endif %}
+                    <span class="pill">{{ project.get_category_display }}</span>
+                </div>
+                <div class="project-body">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+                    <div class="project-links">
+                        {% if project.demo_url %}<a href="{{ project.demo_url }}" target="_blank" rel="noopener" class="btn ghost">Demo</a>{% endif %}
+                        {% if project.source_url %}<a href="{{ project.source_url }}" target="_blank" rel="noopener" class="btn ghost">GitHub</a>{% endif %}
+                    </div>
+                    {% if user.is_authenticated %}
+                        <div class="crud-actions">
+                            <a href="{% url 'project_update' project.pk %}"><i class="ri-edit-line"></i></a>
+                            <form method="post" action="{% url 'project_delete' project.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="link danger"><i class="ri-delete-bin-6-line"></i></button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </article>
+        {% empty %}
+            <p class="muted">No projects yet. Add your first showcase!</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="gallery" class="panel" data-animate>
+    <div class="section-header">
+        <h2>Gallery</h2>
+        {% if user.is_authenticated %}
+            <a class="btn primary" href="{% url 'gallery_create' %}"><i class="ri-upload-cloud-line"></i> Upload image</a>
+        {% endif %}
+    </div>
+    <div class="gallery-grid">
+        {% for item in gallery_items %}
+            <div class="gallery-item" data-animate>
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" data-lightbox>
+                <div class="gallery-meta">
+                    <span>{{ item.title }}</span>
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'gallery_delete' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="link danger"><i class="ri-delete-bin-6-line"></i></button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="muted">Upload memorable shots from your journey.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="blog" class="panel" data-animate>
+    <div class="section-header">
+        <div>
+            <h2>News & Writing</h2>
+            <p class="muted">Thoughts on engineering, learning, and creativity.</p>
+        </div>
+        {% if user.is_authenticated %}
+            <a class="btn primary" href="{% url 'blog_create' %}"><i class="ri-quill-pen-line"></i> New post</a>
+        {% endif %}
+    </div>
+    <div class="blog-grid">
+        {% for post in blog_page %}
+            <article class="blog-card" data-animate data-blog-card>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                {% endif %}
+                <div class="blog-body">
+                    <p class="muted">{{ post.created_at|date:"M d, Y" }}</p>
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content|truncatewords:40 }}</p>
+                    <div class="blog-actions">
+                        <a class="btn ghost" href="#contact">Discuss</a>
+                        {% if user.is_authenticated %}
+                            <div class="crud-actions">
+                                <a href="{% url 'blog_update' post.pk %}"><i class="ri-edit-line"></i></a>
+                                <form method="post" action="{% url 'blog_delete' post.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="link danger"><i class="ri-delete-bin-6-line"></i></button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="blog-full" data-full hidden>
+                        {{ post.content|linebreaks }}
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <p class="muted">No posts yet. Share your journey!</p>
+        {% endfor %}
+    </div>
+    {% if blog_page.paginator.num_pages > 1 %}
+        <div class="pagination">
+            {% if blog_page.has_previous %}
+                <a href="?page={{ blog_page.previous_page_number }}">Prev</a>
+            {% endif %}
+            <span>Page {{ blog_page.number }} / {{ blog_page.paginator.num_pages }}</span>
+            {% if blog_page.has_next %}
+                <a href="?page={{ blog_page.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>
+
+<div class="blog-modal" id="blogModal" aria-hidden="true">
+    <div class="blog-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="blogModalTitle">
+        <button class="close" type="button" aria-label="Close full post">&times;</button>
+        <p class="muted modal-date"></p>
+        <h3 id="blogModalTitle" class="modal-title"></h3>
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<section id="contact" class="panel contact-panel" data-animate>
+    <div class="section-header">
+        <h2>Contact</h2>
+        <p class="muted">Let's craft something bold together.</p>
+    </div>
+    <div class="contact-grid">
+        <form method="post" class="contact-form">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="contact">
+            {{ contact_form.non_field_errors }}
+            <div class="field">
+                {{ contact_form.name.label_tag }}
+                {{ contact_form.name }}
+                {{ contact_form.name.errors }}
+            </div>
+            <div class="field">
+                {{ contact_form.email.label_tag }}
+                {{ contact_form.email }}
+                {{ contact_form.email.errors }}
+            </div>
+            <div class="field">
+                {{ contact_form.subject.label_tag }}
+                {{ contact_form.subject }}
+                {{ contact_form.subject.errors }}
+            </div>
+            <div class="field">
+                {{ contact_form.message.label_tag }}
+                {{ contact_form.message }}
+                {{ contact_form.message.errors }}
+            </div>
+            <button class="btn primary" type="submit">Send Message</button>
+        </form>
+        <div class="contact-info">
+            <div>
+                <i class="ri-remote-control-fill"></i>
+                <div>
+                    <h4>Location</h4>
+                    <p>Remote · Tashkent</p>
+                </div>
+            </div>
+            <div>
+                <i class="ri-send-plane-line"></i>
+                <div>
+                    <h4>Email</h4>
+                    <a href="mailto:xojimuhammadyuldashev207@gmail.com">xojimuhammadyuldashev207@gmail.com</a>
+                </div>
+            </div>
+            <div>
+                <i class="ri-time-line"></i>
+                <div>
+                    <h4>Availability</h4>
+                    <p>Student · Developer · Long-term</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+    <button class="close" aria-label="Close lightbox">&times;</button>
+    <img src="" alt="Preview">
+</div>
+{% endblock %}
+
